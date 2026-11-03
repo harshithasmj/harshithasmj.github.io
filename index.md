@@ -25,5 +25,5 @@ Senior at University of Texas at Austin studying Statistics and Data Science wit
 # Contact
 
 - Email: harshithasmj@gmail.com
-- GitHub: [harshithasmj](https://github.com/harshithasmj)
-- LinkedIn: [your profile](https://www.linkedin.com/in/harshitha-sriramoju-585822240/)
+- [Github](https://github.com/harshithasmj)
+- [Linkedin](https://www.linkedin.com/in/harshitha-sriramoju-585822240/)
