@@ -6,6 +6,7 @@ nav_order: 4
 
 # Contact
 
-- Email: your@email.com
+- Email: harshithasmj@gmail.com
 - GitHub: [harshithasmj](https://github.com/harshithasmj)
-- LinkedIn: [your profile](https://linkedin.com)
+- LinkedIn: [your profile](https://www.linkedin.com/in/harshitha-sriramoju-585822240/)
+
