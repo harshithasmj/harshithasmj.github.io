@@ -18,3 +18,22 @@
 
 .search-input { color: #ffffff; }
 .search-input::placeholder { color: #9fb3dc; }
+
+.ascii-art {
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  line-height: 1.15;
+  color: #9fb3dc;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 1rem 1.5rem 0;
+  white-space: pre;
+  overflow: hidden;
+}
+
+.ascii-caption {
+  color: #6f86b8;
+  font-size: 0.7rem;
+  margin: 0.25rem 1.5rem 1rem;
+}
