@@ -1,0 +1,20 @@
+.side-bar {
+  border-right: none;
+
+  .site-title,
+  .site-header {
+    color: #ffffff;
+  }
+
+  .navigation-list-link {
+    color: #c9d6f0;
+
+    &:hover { color: #ffffff; background-image: none; background-color: #14306b; }
+    &.active { color: #ffffff; font-weight: 600; background-color: #1b3f86; }
+  }
+}
+
+.site-header { background-color: #0a1f44; }
+
+.search-input { color: #ffffff; }
+.search-input::placeholder { color: #9fb3dc; }
