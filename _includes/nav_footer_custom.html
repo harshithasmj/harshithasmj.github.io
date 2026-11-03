@@ -1,0 +1,57 @@
+<pre class="ascii-art" id="ascii-flower" aria-hidden="true"></pre>
+<p class="ascii-caption">harshitha smj</p>
+
+<script>
+(function () {
+  var el = document.getElementById("ascii-flower");
+  if (!el) return;
+
+  var frames = [
+    ["         ",
+     "         ",
+     "    _    ",
+     "   (@)   ",
+     "    |    ",
+     "    |/   ",
+     "    |    "],
+    ["         ",
+     "    _    ",
+     "  _(@)_  ",
+     "   (_)   ",
+     "    |    ",
+     "    |/   ",
+     "    |    "],
+    ["    _    ",
+     "  _(_)_  ",
+     " (_)@(_) ",
+     "   (_)\\  ",
+     "    |/   ",
+     "    |    ",
+     "    |    "],
+    ["    _    ",
+     "  _(_)_  ",
+     " (_)*(_) ",
+     "   (_)/  ",
+     "   \\|    ",
+     "    |    ",
+     "    |    "]
+  ];
+
+  // bud -> opening -> bloom -> sway -> close again
+  var order = [0, 1, 2, 3, 2, 3, 2, 1];
+
+  function draw(i) { el.textContent = frames[i].join("\n"); }
+
+  var reduce = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduce) { draw(2); return; }   // static flower for people who disable motion
+
+  var step = 0;
+  draw(order[0]);
+  setInterval(function () {
+    step = (step + 1) % order.length;
+    draw(order[step]);
+  }, 700);
+})();
+</script>
