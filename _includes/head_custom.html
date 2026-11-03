@@ -1,0 +1,119 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var canvas = document.createElement("canvas");
+  canvas.setAttribute("aria-hidden", "true");
+  canvas.style.cssText =
+    "position:fixed;top:0;left:0;width:100%;height:100%;" +
+    "pointer-events:none;z-index:9999;";
+  document.body.appendChild(canvas);
+  var ctx = canvas.getContext("2d");
+
+  var W = 0, H = 0;
+  function resize() {
+    var dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  // ---- settings you can tweak ----
+  var LINE = 14;              // line height in px (also controls size)
+  var COLOR = "#7f95c9";      // flower color
+  var MAX_ALPHA = 0.4;        // 0 to 1, lower = more subtle
+  var COUNT = window.innerWidth < 700 ? 3 : 6;
+  var GROW = 4000, BLOOM = 3000, HOLD = 7000, FADE = 3000;
+  // --------------------------------
+
+  var TOTAL = GROW + BLOOM + HOLD + FADE;
+  var BACKSLASH = String.fromCharCode(92);
+
+  var HEADS = [
+    ["  (@)  "],
+    ["   _   ", "  (@)  "],
+    ["   _   ", " _(_)_ ", "(_)@(_)", "  (_)  "],
+    ["   _   ", " _(_)_ ", "(_)*(_)", "  (_)  "]
+  ];
+
+  function makeFlower(delay) {
+    return {
+      x: 40 + Math.random() * Math.max(W - 80, 10),
+      rows: 8 + Math.floor(Math.random() * 12),
+      born: performance.now() + delay,
+      phase: Math.random() * 6.28
+    };
+  }
+
+  var flowers = [];
+  var reduce = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  for (var n = 0; n < COUNT; n++) {
+    var f = makeFlower(n * 1500 + Math.random() * 1500);
+    if (reduce) { f.born = performance.now() - (GROW + BLOOM + 500); }
+    flowers.push(f);
+  }
+
+  function drawFlower(f, now) {
+    var t = now - f.born;
+    if (t < 0) return;
+    if (t > TOTAL) {
+      Object.assign(f, makeFlower(Math.random() * 3000));
+      return;
+    }
+
+    var alpha = MAX_ALPHA;
+    if (t > TOTAL - FADE) alpha *= (TOTAL - t) / FADE;
+    ctx.globalAlpha = alpha;
+
+    var g = Math.min(t / GROW, 1);
+    g = 1 - (1 - g) * (1 - g);
+    var grown = Math.floor(f.rows * g);
+    var baseY = H - 6;
+
+    function sway(i) {
+      return Math.sin(now * 0.0014 + f.phase + i * 0.22) * (i / f.rows) * 9;
+    }
+
+    for (var i = 0; i < grown; i++) {
+      var sx = f.x + sway(i);
+      var sy = baseY - i * LINE;
+      ctx.fillText("|", sx, sy);
+      if (i % 5 === 3) ctx.fillText("/", sx + 8, sy);
+      if (i % 5 === 1 && i > 1) ctx.fillText(BACKSLASH, sx - 8, sy);
+    }
+
+    if (grown >= f.rows) {
+      var b = Math.min((t - GROW) / BLOOM, 1);
+      var stage;
+      if (b < 0.33) stage = 0;
+      else if (b < 0.66) stage = 1;
+      else if (b < 1) stage = 2;
+      else stage = 2 + (Math.floor(now / 600) % 2);
+
+      var lines = HEADS[stage];
+      var hx = f.x + sway(f.rows);
+      var hy = baseY - f.rows * LINE;
+      for (var k = lines.length - 1; k >= 0; k--) {
+        ctx.fillText(lines[k], hx, hy - (lines.length - 1 - k) * LINE);
+      }
+    }
+  }
+
+  function frame(now) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = (LINE - 1) + "px Menlo, Consolas, 'Courier New', monospace";
+    ctx.textAlign = "center";
+    ctx.fillStyle = COLOR;
+    for (var j = 0; j < flowers.length; j++) drawFlower(flowers[j], now);
+    ctx.globalAlpha = 1;
+    if (!reduce) requestAnimationFrame(frame);
+  }
+
+  if (reduce) frame(performance.now());
+  else requestAnimationFrame(frame);
+});
+</script>
