@@ -24,28 +24,32 @@
     ["    _    ",
      "  _(_)_  ",
      " (_)@(_) ",
-     "   (_)\\  ",
+     "   (_)   ",
+     "    |    ",
      "    |/   ",
-     "    |    ",
      "    |    "],
-    ["    _    ",
-     "  _(_)_  ",
-     " (_)*(_) ",
-     "   (_)/  ",
-     "   \\|    ",
-     "    |    ",
-     "    |    "]
+    ["     _   ",
+     "   _(_)_ ",
+     "  (_)*(_)",
+     "    (_)  ",
+     "    /|   ",
+     "     |   ",
+     "     |   "]
   ];
 
-  // bud -> opening -> bloom -> sway -> close again
   var order = [0, 1, 2, 3, 2, 3, 2, 1];
 
-  function draw(i) { el.textContent = frames[i].join("\n"); }
+  function draw(i) {
+    el.textContent = frames[i].join("\n");
+  }
 
   var reduce = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (reduce) { draw(2); return; }   // static flower for people who disable motion
+  if (reduce) {
+    draw(2);
+    return;
+  }
 
   var step = 0;
   draw(order[0]);
