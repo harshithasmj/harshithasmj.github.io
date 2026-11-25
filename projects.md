@@ -2,6 +2,7 @@
 title: Projects
 layout: default
 nav_order: 2
+has_childen: true
 ---
 
 # Projects
@@ -59,4 +60,4 @@ An analysis of the public Museum of Modern Art dataset on more than 15,000 artis
 An analysis of the ILPD (Indian Liver Patient Dataset) in a Jupyter notebook. Add one or two sentences here on your question, method, and main finding.
 
 **Tools:** Python, Jupyter
-[View on GitHub](https://github.com/harshithasmj/LiverPatientAnalysis) · [View the notebook](https://nbviewer.org/github/harshithasmj/LiverPatientAnalysis/blob/main/ILPD_Project.ipynb)
+[View on GitHub](https://github.com/harshithasmj/LiverPatientAnalysis)
