@@ -1,0 +1,72 @@
+<pre id="ascii-hero" role="img" aria-label="Animated ASCII art spelling HARSHITHA"></pre>
+
+<style>
+  #ascii-hero {
+    font: min(11px, 1.55vw)/1 ui-monospace, Menlo, Consolas, monospace;
+    white-space: pre;
+    text-align: center;
+    margin: 1.5rem auto;
+    padding: 0;
+    background: transparent;
+    color: inherit;           /* follows your theme, light or dark */
+    overflow: hidden;
+    user-select: none;
+  }
+</style>
+
+<script>
+(() => {
+  const el = document.getElementById('ascii-hero');
+  const TEXT = 'HARSHITHA';      // change me
+  const W = 100, H = 14;         // columns, rows
+  const RAMP = ' .:-=+*#%@';     // light -> dense
+
+  // 1. Draw the text onto a hidden canvas and keep a mask of where letters are.
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.translate(W / 2, H / 2);
+  ctx.scale(1, 0.5);             // characters are ~2x taller than wide; squash to compensate
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  let size = 40;
+  ctx.font = `bold ${size}px sans-serif`;
+  size = size * (W * 0.92) / ctx.measureText(TEXT).width;  // fit width
+  ctx.font = `bold ${size}px sans-serif`;
+  ctx.fillText(TEXT, 0, 0);
+  const px = ctx.getImageData(0, 0, W, H).data;
+  const mask = (x, y) => px[(y * W + x) * 4 + 3] > 100;
+
+  // 2. Every frame: a moving wave field, denser inside the letters.
+  function render(t) {
+    let out = '';
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        let v = (Math.sin(x * 0.15 + t) +
+                 Math.sin(y * 0.45 - t * 1.3) +
+                 Math.sin((x + y) * 0.1 + t * 0.7)) / 6 + 0.5;   // 0..1
+        v = mask(x, y) ? 0.7 + 0.3 * v : v * 0.4;
+        out += RAMP[Math.min(RAMP.length - 1, Math.floor(v * RAMP.length))];
+      }
+      out += '\n';
+    }
+    el.textContent = out;
+  }
+
+  // 3. Animate, but pause off-screen and respect reduced-motion settings.
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let running = false, start = performance.now();
+  function loop(now) {
+    if (!running) return;
+    render((now - start) / 1000);
+    requestAnimationFrame(loop);
+  }
+  render(0);
+  if (!still) {
+    new IntersectionObserver(([e]) => {
+      running = e.isIntersecting;
+      if (running) requestAnimationFrame(loop);
+    }).observe(el);
+  }
+})();
+</script>
